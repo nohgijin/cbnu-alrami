@@ -1,0 +1,23 @@
+.link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  align-items: center;
+  font-size: 10px;
+
+  .label {
+    margin-top: 6px;
+    color: $black-60;
+  }
+}
+
+.active {
+  svg path {
+    stroke: $red-50;
+  }
+
+  .label {
+    color: $red-50;
+  }
+}

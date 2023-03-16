@@ -1,0 +1,66 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@emotion/babel-plugin": "^11.3.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.1",
+    "@types/react": "^17.0.44",
+    "@types/react-dom": "^17.0.11",
+    "@typescript-eslint/parser": "^5.35.1",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "eslint-config-cmi": "^1.0.11",
+    "file-loader": "^6.2.0",
+    "husky": "4",
+    "lerna": "^4.0.0",
+    "prettier-eslint-cli": "^6.0.1",
+    "sass": "^1.49.9",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.3.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
+  },
+  "scripts": {
+    "start:admin": "lerna run --scope admin start",
+    "dev:admin": "lerna run --scope admin dev --stream",
+    "build:admin": "lerna run --scope admin build --stream",
+    "analyze:admin": "lerna run --scope admin analyze --stream",
+    "start:mobile": "lerna run --scope mobile start",
+    "dev:mobile": "lerna run --scope mobile dev --stream",
+    "build:mobile": "lerna run --scope mobile build --stream",
+    "test:mobile": "lerna run --scope mobile test --stream",
+    "analyze:mobile": "lerna run --scope mobile analyze --stream",
+    "start:scraper": "lerna run --scope scraper start",
+    "dev:scraper": "lerna run --scope scraper dev --stream",
+    "start:server": "lerna run --scope server start",
+    "build:server": "lerna run --scope server build --stream",
+    "dev:server": "lerna run --scope server dev --stream",
+    "cov:server": "lerna run --scope server test:cov",
+    "test:server": "lerna run --scope server test:watch --stream",
+    "start:server2": "lerna run --scope server2 start",
+    "build:server2": "lerna run --scope server2 build --stream",
+    "dev:server2": "lerna run --scope server2 start:dev --stream",
+    "gen:local": "lerna run --scope shared gen:local --stream",
+    "gen:dev": "lerna run --scope shared gen:dev --stream",
+    "lint": "yarn eslint .",
+    "lint:fix": "yarn eslint --fix .",
+    "format": "yarn prettier-eslint --write \"**/*.js\" \"**/*.ts\" \"**/*.jsx\" \"**/*.tsx\" --ignore-path .gitignore",
+    "clean": "lerna clean -y && rm -rf ./node_modules",
+    "reinstall": "yarn clean && yarn install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  }
+}

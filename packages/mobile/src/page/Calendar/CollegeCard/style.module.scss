@@ -1,0 +1,29 @@
+.card {
+    position: relative;
+    height: 80px;
+    padding: 22px 20px 18px;
+
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
+
+    .content {
+        @include typography(14);
+        display: block;
+        line-height: 23px;
+        font-weight: 500;
+    }
+
+    .period {
+        @include typography(12);
+        margin-top: 9px;
+        color: $black-50;
+        line-height: 20px;
+    }
+
+    .star {
+        @include position(absolute, bottom 16px right 20px);
+        line-height: 0;
+        background-color: transparent;
+    }
+}

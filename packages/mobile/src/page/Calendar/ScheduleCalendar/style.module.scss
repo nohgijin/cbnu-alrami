@@ -1,0 +1,21 @@
+.box {
+    padding: 10px 28px 3px;
+    color: $black-80;
+    background-color: $black-0;
+
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        justify-items: center;
+
+        .day {
+            @include typography(12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 38px;
+            line-height: 20px;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+.menu-list {
+  @include flicking;
+  @include position(fixed, top 60px left 0 right 0);
+  display: flex;
+  z-index: 100;
+  padding: 6px 12px;
+  background-color: $white;
+  border-top: 1px solid $background;
+
+  .menu {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    white-space: nowrap;
+    background-color: $white;
+    color: $black-80;
+
+    &-name {
+      line-height: 30px;
+    }
+    
+    &:not(:first-child) {
+      margin-left: 16px;
+    }
+    
+    &-clicked {
+      background-color: $red-50;
+      color: $white;
+      border-radius: 100px;
+    
+      &:hover {
+        @include hover-status($white, none);
+      }
+    }
+    
+    &-not-clicked {
+      &:hover {
+        @include hover-status(inherit, none);
+      }
+    }
+  }
+}

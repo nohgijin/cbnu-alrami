@@ -1,0 +1,110 @@
+$footerHeight: 65px;
+$footerLinkDistance: 20px;
+$linkHeight: 61px;
+$linkTooltipDistance: 17px;
+
+.map {
+  width: 100vw;
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+.place-link {
+  @include position(absolute, top 15px left 17px);
+  z-index: 1000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: $white;
+
+  svg {
+    position: relative;
+    left: 16px;
+
+    path {
+      fill: $black-80;
+    }
+  }
+}
+
+.place-arrow {
+  @include position(absolute, top 50% left 50%);
+  transform: translate(-50%, -50%);
+}
+
+.wrap {
+  position: relative;
+  z-index: 10;
+}
+
+.balloon {
+  position: fixed;
+  bottom: $footerHeight + $footerLinkDistance + $linkHeight + $linkTooltipDistance;
+  right: 26px;
+  border-radius: 10px;
+  padding: 18px 12px 13px;
+  background-color: $white;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  line-height: 14px;
+  color: $black-80;
+
+  .content {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 2px;
+    }
+  }
+}
+
+.balloon:after {
+  @include position(absolute, top 27px left 45px);
+  border-top: 59px solid #fff;
+  border-left: 63px solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 0 solid transparent;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  content: "";
+  z-index: -1;
+}
+
+.close_button {
+  @include position(absolute, top 6px right 7px);
+  background-color: transparent;
+  padding: 5px;
+}
+
+.text {
+  margin-top: 6px;
+}
+.small_icon {
+  margin: 0 3px -1px 0;
+}
+
+.arrow {
+  position: absolute;
+  top: 30px;
+  right: 48px;
+  z-index: -1;
+}
+
+.link {
+  position: fixed;
+  right: 15px;
+  display: flex;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  bottom: $footerHeight + $footerLinkDistance;
+  background-color: $red-50;
+  border-radius: 50%;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

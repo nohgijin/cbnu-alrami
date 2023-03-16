@@ -1,0 +1,27 @@
+.setting-cafeteria {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 0 53px;
+  .text {
+    margin-top: 19px;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: center;
+    letter-spacing: 0.015em;
+    color: $black-80;
+  }
+}
+
+.select-cafeteria {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  border-radius: 20px;
+  .radio-select {
+    padding: 27px 29px;
+  }
+}
