@@ -1,0 +1,33 @@
+.full-modal {
+  min-height: calc(var(--vh, 1vh) * 100);
+
+  .header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 60px;
+    padding: 0 24px;
+    background: #fff;
+    z-index: 100;
+
+    .left {
+      display: flex;
+    }
+
+    .title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      @include typography(18);
+      font-weight: 500;
+    }
+  }
+
+  .children {
+    overflow: auto;
+  }
+}

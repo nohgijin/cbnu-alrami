@@ -1,0 +1,113 @@
+.wrap {
+  @include position(fixed, left 25px right 25px bottom 94px);
+  display: flex;
+  align-items: center;
+  padding: 20px 24px 30px 16px;
+  background-color: $white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+}
+
+.image {
+  flex: 0 0 auto;
+  width: 90px;
+  height: 90px;
+  margin-top: 10px;
+  border-radius: 20px;
+}
+
+.place-image {
+  margin-top: 0;
+}
+
+.info {
+  padding-top: 19px;
+  margin-left: 16px;
+  flex: 1 1 auto;
+}
+
+.place-info {
+  margin-left: 28px;
+  flex: 1 1 auto;
+}
+
+.title {
+  @include typography(14);
+  line-height: 23px;
+  color: $black-100;
+}
+
+.address {
+  @include typography(12);
+  display: block;
+  line-height: 20px;
+  margin-top: 8px;
+  color: $black-50;
+}
+
+.place-address {
+  margin-top: 4px;
+}
+
+.link {
+  display: block;
+
+  .text {
+    display: inline-block;
+    margin-top: 16px;
+    @include typography(12);
+    color: $black-50;
+  }
+
+  svg {
+    margin: 0 0 -1px 3px;
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  background-color: $white;
+  padding: 16px 36px 16px 16px;
+  border-radius: 20px;
+
+  &:not(:first-child) {
+    margin-top: 11px;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.school_image {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+  flex: 0 0 auto;
+}
+
+.summary {
+  flex: 1 1 auto;
+
+  &:not(:first-child) {
+    margin-left: 23px;
+  }
+}
+
+.summary_title {
+  display: block;
+  padding-top: 20px;
+  color: $black-100;
+  line-height: 18px;
+}
+
+.summary_description {
+  display: block;
+  font-size: 12px;
+  margin-top: 6px;
+  color: $black-40;
+}

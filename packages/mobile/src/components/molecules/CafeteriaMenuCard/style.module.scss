@@ -1,0 +1,33 @@
+.cafeteria-menu-card {
+  min-height: 160px;
+  margin-bottom: 24px;
+  padding: 22px 24px 15px;
+  &:last-of-type {
+    margin: 0;
+  }
+  .time {
+    display: flex;
+    margin-bottom: 17px;
+    @include typography(16);
+    .meal-time {
+      color: $black-100;
+    }
+    &-info {
+      margin-left: auto;
+      @include typography(14);
+      color: $black-40;
+    }
+  }
+  .meal {
+    margin-top: 15px;
+    font-size: 13px;
+    line-height: 35px;
+    &-menu {
+      color: $black-80;
+    }
+    &-calorie {
+      display: block;
+      color: $black-50;
+    }
+  }
+}

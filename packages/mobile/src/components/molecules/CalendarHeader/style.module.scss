@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  border-bottom: 1px solid $background-20;
+  background-color: $black-0;
+
+  .container {
+    display: flex;
+    align-items: center;
+
+    .year-month {
+      margin: 0 29px;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 28px;
+      color: $black-100;
+    }
+  }
+}

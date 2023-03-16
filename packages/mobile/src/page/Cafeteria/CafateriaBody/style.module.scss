@@ -1,0 +1,41 @@
+$cafeteria-header: 109px;
+$cafeteria-body-padding: 24px;
+$cafeteria-padding-top: $cafeteria-header + $cafeteria-body-padding;
+$cafeteria-padding-bottom: $footer + $cafeteria-body-padding;
+
+.cafeteria {
+  padding: $cafeteria-padding-top $cafeteria-body-padding $cafeteria-padding-bottom;
+}
+
+.no-menu {
+  min-height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .go-out {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-text {
+      margin-top: 20px;
+      line-height: 26px;
+      font-size: 16px;
+      color: $background-50;
+    }
+  }
+}
+
+.share-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 36px auto 36px - $cafeteria-body-padding;
+  &-text {
+    margin-left: 5px;
+    @include typography(14);
+    line-height: 30px;
+    color: $background-50;
+  }
+}
