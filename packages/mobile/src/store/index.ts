@@ -4,10 +4,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+import boardReducer from "./boardSlice";
 import cafeteriaReducer from "./cafeteriaSlice";
 import placeReducer from "./placeSlice";
 import settingReducer from "./settingSlice";
 import statusReducer from "./statusSlice";
+import toastReducer from "./toastSlice";
 
 const persistConfig = {
   key: "root",
@@ -25,9 +27,11 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: {
     statusReducer,
+    boardReducer,
     placeReducer,
     settingReducer,
     cafeteriaReducer,
+    toastReducer,
     persistedReducer,
   },
   middleware: (getDefaultMiddleware) => {

@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { Question } from "@components/atoms/icon";
 import Line from "@components/atoms/Line";
+import Popover from "@components/atoms/Popover";
 import {
   usePopularArticlesQuery,
   useSubscribeArticlesQuery,
 } from "@hooks/api/article";
 import classNames from "classnames";
+import { EMPTY_TITLE_GUIDE_MESSAGE } from "src/consts";
+import { setRecentBoardId } from "src/utils/storage";
 
 import $ from "./style.module.scss";
 
@@ -25,7 +29,28 @@ const useArticles = (kind: Props["kind"]) => {
 function ArticleHeader({ kind, setKind }: Props) {
   return (
     <div className={$.header}>
-      <span>공지사항</span>
+      <div className={$["guide-wrapper"]}>
+        <span className={$.title}>공지사항</span>
+        <Popover
+          placement="right"
+          overlay={
+            <div className={$.overlay}>
+              인기는 전체 공지사항 중 최근 2주간
+              <br />
+              좋아요, 조회수 높은 순으로 제공됩니다.
+              <br />
+              최신은 구독한 게시판의 공지사항이
+              <br />
+              등록된 순서로 제공됩니다.
+            </div>
+          }
+          trigger="click"
+        >
+          <div className={$.trigger}>
+            <Question size={16} stroke="#aaa" />
+          </div>
+        </Popover>
+      </div>
       <div className={$["button-wrapper"]}>
         <button
           type="button"
@@ -73,7 +98,14 @@ function Article() {
           const { title, id } = articleData;
           return (
             <div className={$.title} key={id}>
-              <Link to={`/article/detail/${id}`}>{title}</Link>
+              <Link
+                to={`/article/detail/${id}`}
+                onClick={() => {
+                  return setRecentBoardId(articleData.board.id);
+                }}
+              >
+                {title || EMPTY_TITLE_GUIDE_MESSAGE}
+              </Link>
             </div>
           );
         })}

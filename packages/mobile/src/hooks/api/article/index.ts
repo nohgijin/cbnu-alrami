@@ -4,10 +4,12 @@ import {
   useCoreQuery,
 } from "@hooks/api/core";
 import { ArticleApiService } from "@shared/swagger-api/generated";
-import { queryKey } from "src/consts/react-query";
+import { queryKey } from "src/consts/react-query/queryKey";
+import { staleTime } from "src/consts/react-query/staleTime";
 import { queryClient } from "src/main";
 import { GetParams } from "src/type/utils";
-import { getUuid } from "src/utils/storage";
+import { getRecentBoardId, getUuid } from "src/utils/storage";
+import { toastSuccess } from "src/utils/toast";
 
 const uuid = getUuid();
 
@@ -17,7 +19,7 @@ export const usePopularArticlesQuery = (
   >,
 ) => {
   return useCoreInfiniteQuery(
-    queryKey.popularArticles(params),
+    queryKey.popularArticles(),
     ({ pageParam = 1 }) => {
       return ArticleApiService.articleControllerFindPopularArticles({
         ...params,
@@ -39,7 +41,7 @@ export const useSubscribeArticlesQuery = (
   >,
 ) => {
   return useCoreInfiniteQuery(
-    queryKey.subscribeArticles({ ...params, uuid }),
+    queryKey.subscribeArticles(),
     ({ pageParam = 1 }) => {
       return ArticleApiService.articleControllerFindSubscribeArticle({
         ...params,
@@ -62,7 +64,7 @@ export const useBookmarkArticlesQuery = (
   >,
 ) => {
   return useCoreInfiniteQuery(
-    queryKey.bookmarkArticles({ ...params, uuid }),
+    queryKey.bookmarkArticles(),
     ({ pageParam = 1 }) => {
       return ArticleApiService.articleControllerFindBookmarkArticle({
         ...params,
@@ -81,9 +83,25 @@ export const useBookmarkArticlesQuery = (
 export const useArticleQuery = (
   params: GetParams<typeof ArticleApiService.articleControllerFindOne>,
 ) => {
-  return useCoreQuery(queryKey.article({ ...params, uuid }), () => {
-    return ArticleApiService.articleControllerFindOne({ ...params, uuid });
-  });
+  return useCoreQuery(
+    queryKey.article({ ...params, uuid }),
+    () => {
+      return ArticleApiService.articleControllerFindOne({ ...params, uuid });
+    },
+    {
+      staleTime: staleTime.short,
+      onSuccess: () => {
+        Promise.all([
+          queryClient.invalidateQueries(queryKey.popularArticles()),
+          queryClient.invalidateQueries(queryKey.subscribeArticles()),
+          queryClient.invalidateQueries(queryKey.bookmarkArticles()),
+          queryClient.invalidateQueries(
+            queryKey.boardArticles({ id: Number(getRecentBoardId())! }),
+          ),
+        ]);
+      },
+    },
+  );
 };
 
 export const usePostBookmarkArticleMutation = (
@@ -95,9 +113,13 @@ export const usePostBookmarkArticleMutation = (
     },
     {
       onSuccess: () => {
-        return queryClient.invalidateQueries(
-          queryKey.article({ ...params, uuid }),
-        );
+        Promise.all([
+          queryClient.invalidateQueries(queryKey.article({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.bookmarkArticles()),
+        ]);
+        toastSuccess({
+          message: "공지사항이 북마크 되었습니다.",
+        });
       },
     },
   );
@@ -112,9 +134,13 @@ export const useDeleteBookmarkArticleMutation = (
     },
     {
       onSuccess: () => {
-        return queryClient.invalidateQueries(
-          queryKey.article({ ...params, uuid }),
-        );
+        Promise.all([
+          queryClient.invalidateQueries(queryKey.article({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.bookmarkArticles()),
+        ]);
+        toastSuccess({
+          message: "공지사항이 북마크 해제되었습니다.",
+        });
       },
     },
   );
@@ -129,9 +155,12 @@ export const usePostLikeArticleMutation = (
     },
     {
       onSuccess: () => {
-        return queryClient.invalidateQueries(
-          queryKey.article({ ...params, uuid }),
-        );
+        Promise.all([
+          queryClient.invalidateQueries(queryKey.article({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.popularArticles()),
+          queryClient.invalidateQueries(queryKey.subscribeArticles()),
+          queryClient.invalidateQueries(queryKey.bookmarkArticles()),
+        ]);
       },
     },
   );
@@ -146,9 +175,12 @@ export const useDeleteLikeArticleMutation = (
     },
     {
       onSuccess: () => {
-        return queryClient.invalidateQueries(
-          queryKey.article({ ...params, uuid }),
-        );
+        Promise.all([
+          queryClient.invalidateQueries(queryKey.article({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.popularArticles()),
+          queryClient.invalidateQueries(queryKey.subscribeArticles()),
+          queryClient.invalidateQueries(queryKey.bookmarkArticles()),
+        ]);
       },
     },
   );

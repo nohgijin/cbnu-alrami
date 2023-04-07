@@ -1,10 +1,12 @@
 import { Restaurant } from "src/type";
+import { v4 as uuidv4 } from "uuid";
 
 const SELECTED_CAFETERIA = "SELECTED_CAFETERIA" as const;
 const SHOW_CAFETERIA_SELECT_GUIDE = "SHOW_CAFETERIA_SELECT_GUIDE" as const;
 const SHOW_CAFETERIA_SELECT_FINAL_GUIDE =
   "SHOW_CAFETERIA_SELECT_FINAL_GUIDE" as const;
-const TOKEN = "TOKEN" as const;
+const uuidKey = "uuid" as const;
+const RECENT_BOARD_ID = "RECENT_BOARD_ID" as const;
 
 export const getSelectedCafeteria = () => {
   const item = localStorage.getItem(SELECTED_CAFETERIA);
@@ -47,12 +49,22 @@ export const getShowCafeteriaSelectFinalGuide = () => {
 };
 
 export const getUuid = () => {
-  const uuid = localStorage.getItem(TOKEN);
-  return uuid ?? undefined;
+  const uuid = localStorage.getItem(uuidKey);
+  return uuid ?? createUuid();
 };
 
-export const setUuid = () => {
-  if (!getUuid()) {
-    localStorage.setItem(TOKEN, "1111");
-  }
+export const createUuid = () => {
+  const uuid = uuidv4();
+
+  localStorage.setItem(uuidKey, uuid);
+
+  return uuid;
+};
+
+export const setRecentBoardId = (boardId: number) => {
+  localStorage.setItem(RECENT_BOARD_ID, `${boardId}`);
+};
+
+export const getRecentBoardId = () => {
+  return localStorage.getItem(RECENT_BOARD_ID);
 };

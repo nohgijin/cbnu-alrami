@@ -1,9 +1,9 @@
 import { Close, Download } from "@components/atoms/icon";
-import Image from "@components/atoms/Image";
-import ImageSlider from "@components/molecules/ImageSlider";
+import SwiperImage from "@components/molecules/SwiperImage";
 import { Image as ImageType } from "@shared/swagger-api/generated";
 import classnames from "classnames";
 import { DefaultProps } from "src/type/props";
+import { isFromApp } from "src/utils/webview";
 
 import $ from "./style.module.scss";
 
@@ -11,25 +11,36 @@ type Props = {
   images: ImageType[];
   order: number;
   setOrder: (prev: number) => void;
-  onClose: (value: boolean) => void;
+  onClose: () => void;
 } & DefaultProps;
 
 function ImageModal({ order, setOrder, onClose, images }: Props) {
   // TODO: 백엔드 수정 후 확인필요
   const handleDownloadClick = async () => {
-    const { id, url } = images[order];
-    const response = await fetch(url);
-    const file = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(file);
-    const link = document.createElement("a");
-    document.body.appendChild(link);
-    link.download = `충림이공지사항${id}`;
-    link.href = downloadUrl;
+    const { id, url } = images[order - 1];
 
-    link.click();
+    if (isFromApp) {
+      baseApp.postMessage(
+        JSON.stringify({
+          action: "image",
+          url,
+          preview: false,
+        }),
+      );
+    } else {
+      const response = await fetch(url);
+      const file = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(file);
+      const link = document.createElement("a");
+      document.body.appendChild(link);
+      link.download = `충림이이미지${id}`;
+      link.href = downloadUrl;
 
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(downloadUrl);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+    }
   };
 
   return (
@@ -43,28 +54,19 @@ function ImageModal({ order, setOrder, onClose, images }: Props) {
           >
             <Download size={16} stroke="#fff" />
           </button>
-          <button
-            type="button"
-            className={$.close}
-            onClick={() => {
-              return onClose(false);
-            }}
-          >
+          <button type="button" className={$.close} onClick={onClose}>
             <Close size={16} stroke="#fff" />
           </button>
         </div>
       </div>
       <div className={$.body}>
-        <ImageSlider
+        <SwiperImage
           className={$["modal-slider"]}
-          total={images.length}
-          {...{ order, setOrder }}
-        >
-          {images.map((image) => {
-            const { url } = image;
-            return <Image key={url} src={url} alt="공지사항 이미지" />;
+          imageDatas={images.map((image) => {
+            return image.url;
           })}
-        </ImageSlider>
+          {...{ order, setOrder }}
+        />
       </div>
     </div>
   );

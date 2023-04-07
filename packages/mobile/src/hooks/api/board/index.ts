@@ -4,7 +4,8 @@ import {
   useCoreQuery,
 } from "@hooks/api/core";
 import { BoardApiService } from "@shared/swagger-api/generated";
-import { queryKey } from "src/consts/react-query";
+import { queryKey } from "src/consts/react-query/queryKey";
+import { staleTime } from "src/consts/react-query/staleTime";
 import { queryClient } from "src/main";
 import { GetParams } from "src/type/utils";
 import { getUuid } from "src/utils/storage";
@@ -53,9 +54,13 @@ export const useSubscribeBoardsQuery = () => {
 };
 
 export const useBoardsQuery = () => {
-  return useCoreQuery(queryKey.boards({ uuid }), () => {
-    return BoardApiService.boardControllerFind({ uuid });
-  });
+  return useCoreQuery(
+    queryKey.boards({ uuid }),
+    () => {
+      return BoardApiService.boardControllerFind({ uuid });
+    },
+    { staleTime: staleTime.long },
+  );
 };
 
 export const useBoardQuery = (
@@ -76,16 +81,9 @@ export const useSubscribeBoardMutation = (
     {
       onSuccess: () => {
         Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: queryKey.subscribeBoards,
-          }),
-          queryClient.invalidateQueries({
-            queryKey: queryKey.board({ ...params, uuid }),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: queryKey.subscribeArticles({ uuid }),
-            refetchType: "all",
-          }),
+          queryClient.invalidateQueries(queryKey.subscribeBoards),
+          queryClient.invalidateQueries(queryKey.board({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.subscribeArticles({ uuid })),
         ]);
         toastSuccess({
           message: "구독이 추가되었습니다.",
@@ -105,17 +103,9 @@ export const useUnSubscribeBoardMutation = (
     {
       onSuccess: () => {
         Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: queryKey.subscribeBoards,
-          }),
-          queryClient.invalidateQueries({
-            queryKey: queryKey.board({ ...params, uuid }),
-          }),
-
-          queryClient.invalidateQueries({
-            queryKey: queryKey.subscribeArticles({ uuid }),
-            refetchType: "all",
-          }),
+          queryClient.invalidateQueries(queryKey.subscribeBoards),
+          queryClient.invalidateQueries(queryKey.board({ ...params, uuid })),
+          queryClient.invalidateQueries(queryKey.subscribeArticles({ uuid })),
         ]);
         toastSuccess({
           message: "구독이 해제되었습니다.",

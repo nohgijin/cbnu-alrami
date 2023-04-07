@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { LeftArrow } from "@components/atoms/icon";
 import ChipGroup from "@components/molecules/ChipGroup";
 import { PlaceSchoolDto } from "@shared/swagger-api/generated";
-import BorderBox from "src/components/atoms/BorderBox";
 import { useSchoolQuery } from "src/hooks/api/school";
 import useSearch from "src/hooks/useSearch";
 import DetailGroup from "src/page/Place/DetailGroup";
@@ -59,7 +58,7 @@ function PlaceDetail() {
     <>
       <div className={$.header}>
         <NavLink to="/map" className={$.link}>
-          <LeftArrow stroke="#aaa" size={16} />
+          <LeftArrow stroke="#5e5e5e" size={16} />
           <span className="blind">뒤로가기</span>
         </NavLink>
         <h1 className={$.title}>캠퍼스맵</h1>
@@ -73,12 +72,6 @@ function PlaceDetail() {
           제보하기
         </NavLink> */}
       </div>
-
-      <BorderBox className={$.tooltip} style={{ width: "auto" }}>
-        <span className={$.tooltip_title}>
-          식사는 현재 베타버전으로, 다양한 맛집이 더 추가될 예정입니다.
-        </span>
-      </BorderBox>
       <DetailGroup schoolDatas={schoolDatas} />
     </>
   );

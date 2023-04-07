@@ -10,8 +10,8 @@ import classNames from "classnames";
 import { Dayjs } from "dayjs";
 import { DefaultProps } from "src/type/props";
 import { getDatePeriod } from "src/utils/calendarTools";
+import { getUuid } from "src/utils/storage";
 
-import { MOCK_UUID } from "..";
 import $ from "./style.module.scss";
 
 type Props = {
@@ -33,10 +33,10 @@ function CollegeCard(props: Props) {
 
   const handleStarClick = () => {
     if (isBookmarked) {
-      removeScheduleBookmark.mutate({ id, uuid: MOCK_UUID });
+      removeScheduleBookmark.mutate({ id, uuid: getUuid() });
       return;
     }
-    addScheduleBookmark.mutate({ id, uuid: MOCK_UUID });
+    addScheduleBookmark.mutate({ id, uuid: getUuid() });
   };
 
   return (
@@ -47,7 +47,7 @@ function CollegeCard(props: Props) {
         {isBookmarked ? (
           <Star size={20} fill="#d66d6e" stroke="#d66d6e" />
         ) : (
-          <Star size={20} stroke="#c3c3c3" />
+          <Star size={20} stroke="#5e5e5e" />
         )}
       </button>
     </BorderBox>

@@ -8,29 +8,32 @@ type Props = {
   title?: string;
   right?: JSX.Element;
   children: React.ReactNode;
+  onNavigate?: () => void;
 };
 
-// MEMO: /board에서 +후 x클릭 시 히스토리에 쌓이기 때문에 설정부분 뒤로가기 분기처리
-function FullPageModalTemplate({ left, title, right, children }: Props) {
+function FullPageModalTemplate({
+  left,
+  title,
+  right,
+  children,
+  onNavigate,
+}: Props) {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+
+  const handleBackClick = () => {
+    if (onNavigate) {
+      return onNavigate();
+    }
+    if (window.history.length <= 1) {
+      return navigate("/");
+    }
+    return navigate(-1);
+  };
 
   return (
     <div className={$["full-modal"]}>
       <div className={$.header}>
-        <button
-          type="button"
-          className={$.left}
-          onClick={() => {
-            if (pathname === "/setting/board") {
-              return navigate("/setting");
-            }
-            if (pathname === "/setting") {
-              return navigate("/home");
-            }
-            return navigate(-1);
-          }}
-        >
+        <button type="button" className={$.left} onClick={handleBackClick}>
           {left}
         </button>
         <div className={$.title}>{title}</div>

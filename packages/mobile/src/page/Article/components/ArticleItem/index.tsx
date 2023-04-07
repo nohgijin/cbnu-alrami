@@ -2,34 +2,44 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import dayjs from "dayjs";
+import { EMPTY_TITLE_GUIDE_MESSAGE } from "src/consts";
+import { setRecentBoardId } from "src/utils/storage";
 
 import $ from "./style.module.scss";
 
 type Props = {
   id: number;
+  boardId: number;
   boardName: string;
   title: string;
-  createdDateTime: string;
+  dateTime: string;
   viewCount: number;
-  bookmarkCount: number;
+  likeCount: number;
 };
 
 function ArticleItem({
   id,
+  boardId,
   boardName,
   title,
-  createdDateTime,
+  dateTime,
   viewCount,
-  bookmarkCount,
+  likeCount,
 }: Props) {
   return (
-    <Link className={$["article-item"]} to={`/article/detail/${id}`}>
+    <Link
+      className={$["article-item"]}
+      to={`/article/detail/${id}`}
+      onClick={() => {
+        return setRecentBoardId(boardId);
+      }}
+    >
       <div className={$["board-name"]}>{boardName}</div>
-      <div className={$.title}>{title}</div>
+      <div className={$.title}>{title || EMPTY_TITLE_GUIDE_MESSAGE}</div>
       <div className={$.info}>
-        <span>{dayjs(createdDateTime).format("YYYY-MM-DD")}</span>&nbsp;/&nbsp;
+        <span>{dayjs(dateTime).format("YYYY-MM-DD")}</span>&nbsp;/&nbsp;
         <span>조회수&nbsp;{viewCount}</span>
-        &nbsp;/&nbsp;<span>좋아요&nbsp;{bookmarkCount}</span>
+        &nbsp;/&nbsp;<span>좋아요&nbsp;{likeCount}</span>
       </div>
     </Link>
   );

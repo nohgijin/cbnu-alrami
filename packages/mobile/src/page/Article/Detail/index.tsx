@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { FillHeart, Heart, LeftArrow } from "@components/atoms/icon";
-import Image from "@components/atoms/Image";
-import ImageSlider from "@components/molecules/ImageSlider";
+import SwiperImage from "@components/molecules/SwiperImage";
 import ImageModal from "@components/shared/ImageModal";
 import FullPageModalTemplate from "@components/templates/FullPageModalTemplate";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@hooks/api/article";
 import classnames from "classnames";
 import dayjs from "dayjs";
+import { EMPTY_TITLE_GUIDE_MESSAGE } from "src/consts";
 import ArticleFooter from "src/page/Article/components/Footer";
 import { getUuid } from "src/utils/storage";
 
@@ -22,8 +22,10 @@ function ArticleDetail() {
   const { pathname } = useLocation();
   const articleId = Number(pathname.split("/").at(-1));
   const [ isLikeClick, setIsLikeClick ] = useState(false);
-  const [ order, setOrder ] = useState(0);
-  const { data: articleData, isLoading } = useArticleQuery({ id: articleId });
+  const [ order, setOrder ] = useState(1);
+  const { data: articleData, isLoading } = useArticleQuery({
+    id: articleId,
+  });
   const postLikeArticle = usePostLikeArticleMutation({ id: articleId });
   const deleteLikeArticle = useDeleteLikeArticleMutation({ id: articleId });
   const [ enlargeModal, setEnlargeModal ] = useState(false);
@@ -32,16 +34,16 @@ function ArticleDetail() {
   if (!articleData) return <>데이터가 없습니다.</>;
 
   const {
-    board: { id, name },
+    board: { name },
     title,
     viewCount,
-    bookmarkCount,
-    createdDateTime,
+    dateTime,
     content,
     isBookmark,
     isLike,
     likeCount,
     images,
+    url,
   } = articleData;
 
   const handleToggleLikeClick = (articleId: number) => {
@@ -54,36 +56,32 @@ function ArticleDetail() {
     postLikeArticle.mutate({ id: articleId });
   };
 
-  const isScraperArticle = `${id}`[0] === ("1" || "2");
   const isUser = !!getUuid();
 
   return (
     <div className={$["article-detail"]}>
       <FullPageModalTemplate
-        left={isUser ? <LeftArrow stroke="#AAAAAA" size={16} /> : <></>}
+        left={isUser ? <LeftArrow stroke="#5e5e5e" size={16} /> : <></>}
         title={name}
       >
         <div className={$.children}>
-          <div className={$.title}>{title}</div>
+          <div className={$.title}>{title || EMPTY_TITLE_GUIDE_MESSAGE}</div>
           <div className={$.info}>
-            <span>{dayjs(createdDateTime).format("YYYY-MM-DD")}</span>
+            <span>{dayjs(dateTime).format("YYYY-MM-DD")}</span>
             &nbsp;/&nbsp;
             <span>조회수&nbsp;{viewCount}</span>
-            &nbsp;/&nbsp;<span>좋아요&nbsp;{bookmarkCount}</span>
+            &nbsp;/&nbsp;<span>좋아요&nbsp;{likeCount}</span>
           </div>
           {!!images?.length && (
-            <ImageSlider
-              total={images.length}
-              {...{ order, setOrder }}
+            <SwiperImage
+              imageDatas={images.map((image) => {
+                return image.url;
+              })}
               onOpen={() => {
                 return setEnlargeModal(true);
               }}
-            >
-              {images.map((image) => {
-                const { url } = image;
-                return <Image key={url} src={url} alt="공지사항 이미지" />;
-              })}
-            </ImageSlider>
+              {...{ order, setOrder }}
+            />
           )}
           <div
             className={$.content}
@@ -110,9 +108,7 @@ function ArticleDetail() {
             </button>
           </div>
         </div>
-        <ArticleFooter
-          {...{ articleId, isBookmark, isUser, isScraperArticle }}
-        />
+        <ArticleFooter {...{ articleId, isBookmark, isUser, url }} />
       </FullPageModalTemplate>
       {enlargeModal && images?.length && (
         <ImageModal

@@ -1,7 +1,7 @@
 import { CafeteriaMenu } from "@shared/swagger-api/generated";
 import { Restaurant } from "src/type";
 
-import { Menu } from "./type";
+import { Menu } from "../type";
 
 export const CAFETERIA_MENUS: (CafeteriaMenu["name"] | string)[] = [
   CafeteriaMenu.name.BONGWAN,
@@ -38,3 +38,4 @@ export const BASE_HEAD_META = {
 };
 
 export const DEFFERRED_LOADING_TIME = 1000;
+export const EMPTY_TITLE_GUIDE_MESSAGE = "제목이 없는 공지사항입니다";

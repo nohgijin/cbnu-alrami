@@ -20,6 +20,7 @@ export type { CreateScheduleDto } from './models/CreateScheduleDto';
 export type { CreateUserDto } from './models/CreateUserDto';
 export type { DuplicatedArticleException } from './models/DuplicatedArticleException';
 export type { DuplicatedLoginIdException } from './models/DuplicatedLoginIdException';
+export type { DuplicatedResponseDto } from './models/DuplicatedResponseDto';
 export type { Image } from './models/Image';
 export type { LoginDto } from './models/LoginDto';
 export type { MutationResponse } from './models/MutationResponse';
@@ -42,6 +43,7 @@ export { UpdateAdminDto } from './models/UpdateAdminDto';
 export type { UpdateArticleDto } from './models/UpdateArticleDto';
 export type { UpdateBoardDto } from './models/UpdateBoardDto';
 export type { UpdatePlaceDto } from './models/UpdatePlaceDto';
+export type { UpdateUserDto } from './models/UpdateUserDto';
 export { Weather } from './models/Weather';
 
 export { AdminApiService } from './services/AdminApiService';

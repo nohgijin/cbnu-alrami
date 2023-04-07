@@ -5,9 +5,10 @@ import {
   ScheduleApiService,
 } from "@shared/swagger-api/generated";
 import dayjs, { Dayjs } from "dayjs";
-import { queryKey } from "src/consts/react-query";
+import { queryKey } from "src/consts/react-query/queryKey";
 import { queryClient } from "src/main";
 import { GetParams } from "src/type/utils";
+import { getUuid } from "src/utils/storage";
 
 export type FormattedSchedule = Omit<
   Schedule,
@@ -83,16 +84,12 @@ export const useTodaySchedulesQuery = (
   );
 };
 
-export const useBookmarkSchedulesQuery = (
-  uuid: GetParams<
-    typeof ScheduleApiService.scheduleControllerFindBookmarkSchedule
-  >["uuid"],
-) => {
+export const useBookmarkSchedulesQuery = () => {
   return useCoreQuery<Schedule[], FormattedSchedule[]>(
     queryKey.bookmarkSchedules,
     () => {
       return ScheduleApiService.scheduleControllerFindBookmarkSchedule({
-        uuid,
+        uuid: getUuid(),
       });
     },
     {

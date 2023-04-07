@@ -1,3 +1,5 @@
+import { useAppDispatch } from "src/store";
+import { setHasFooter } from "src/store/toastSlice";
 import { DefaultProps, IconProps } from "src/type/props";
 import { toastSuccess } from "src/utils/toast";
 import { isFromApp } from "src/utils/webview";
@@ -16,15 +18,22 @@ export default function ShareButton({
   successMsg,
   children,
 }: Props) {
+  const dispatch = useAppDispatch();
+
   const handleCopyClick = () => {
     if (isFromApp) {
-      baseApp.postMessage(window.location.href);
+      baseApp.postMessage(
+        JSON.stringify({
+          action: "copy",
+          url: window.location.href,
+        }),
+      );
     } else {
       navigator.clipboard.writeText(window.location.href);
     }
+    dispatch(setHasFooter({ hasFooter: true }));
     toastSuccess({
       message: successMsg,
-      style: { marginBottom: "58px" },
     });
   };
 

@@ -34,7 +34,7 @@ function Title() {
   if (kind === "전체") {
     return (
       <div className={$.title}>
-        어떤 공지를
+        어떤 공지사항을
         <br />
         받아볼까요?
       </div>
@@ -43,7 +43,7 @@ function Title() {
   if (kind === "공통") {
     return (
       <div className={$.title}>
-        어떤 기관의 공지를
+        어떤 기관의 공지사항을
         <br />
         받아볼까요?
       </div>
@@ -69,7 +69,7 @@ function Title() {
   if (kind === "학생회") {
     return (
       <div className={$.title}>
-        어떤 학생회의 공지를
+        어떤 학생회의 공지사항을
         <br />
         받아볼까요?
       </div>
@@ -78,9 +78,9 @@ function Title() {
   return (
     <div className={$.title}>
       <div className={$["icon-message"]}>
-        <UnSubscription stroke="#AAAAAA" size={36} />를 터치하여
+        <UnSubscription size={36} />를 터치하여
       </div>
-      원하는 공지를 구독해요!
+      원하는 공지사항을 구독해요!
     </div>
   );
 }

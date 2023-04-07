@@ -19,8 +19,8 @@ function Footer() {
     {
       id: 3,
       icon: Speaker,
-      label: "공지",
-      to: "/article/subscribe",
+      label: "공지사항",
+      to: "/article",
     },
     {
       id: 4,

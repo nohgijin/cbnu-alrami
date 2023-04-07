@@ -13,6 +13,8 @@ import {
   useUnSubscribeBoardMutation,
 } from "@hooks/api/board";
 import classnames from "classnames";
+import { useAppDispatch } from "src/store";
+import { setHasFooter } from "src/store/toastSlice";
 import { DefaultProps } from "src/type/props";
 
 import $ from "./style.module.scss";
@@ -29,6 +31,7 @@ function SubscriptionNoticeGroup({
   isSubscribe,
   className,
 }: Props) {
+  const dispatch = useAppDispatch();
   const postSubscribeBoard = useSubscribeBoardMutation({ id });
   const deleteSubscribeBoard = useUnSubscribeBoardMutation({ id });
   const postNoticeBoard = useNoticeBoardMutation({ id });
@@ -56,8 +59,16 @@ function SubscriptionNoticeGroup({
     postSubscribeBoard.mutate({ id });
   };
 
+  const handleGroupClick = () => {
+    dispatch(setHasFooter({ hasFooter: false }));
+  };
+
   return (
-    <div className={classnames($["subscription-notice-group"], className)}>
+    <button
+      type="button"
+      className={classnames($["subscription-notice-group"], className)}
+      onClick={handleGroupClick}
+    >
       {isSubscribe ? (
         <div className={$.group}>
           <button type="button" onClick={handleUnSubscriptionClick}>
@@ -69,16 +80,16 @@ function SubscriptionNoticeGroup({
             </button>
           ) : (
             <button type="button" onClick={handleNoticeClick}>
-              <UnAlarm size={22} stroke="#AAAAAA" />
+              <UnAlarm size={22} stroke="#5E5E5E" />
             </button>
           )}
         </div>
       ) : (
         <button type="button" onClick={handleSubscriptionClick}>
-          <UnSubscription size={30} stroke="#AAAAAA" />
+          <UnSubscription size={30} stroke="#5E5E5E" />
         </button>
       )}
-    </div>
+    </button>
   );
 }
 

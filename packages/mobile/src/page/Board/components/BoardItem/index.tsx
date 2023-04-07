@@ -1,8 +1,10 @@
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import { Arrow } from "@components/atoms/icon";
 import SubscriptionNoticeGroup from "@components/shared/SubscriptionNoticeGroup";
 import classnames from "classnames";
+import { pushBreadcrumb } from "src/store/boardSlice";
 
 import $ from "./style.module.scss";
 
@@ -25,13 +27,17 @@ function BoardItem({
 }: Props) {
   const { pathname } = useLocation();
   const to = isLast ? `/board/article/${id}` : `${pathname}/${id}`;
+  const dispatch = useDispatch();
+  const handleBoardClick = () => {
+    dispatch(pushBreadcrumb({ breadcrumb: { path: `${id}`, name: title } }));
+  };
 
   if (isLast) {
     return (
       <Link className={classnames($["board-item"], $.last)} to={to}>
         <div className={$.title}>
           {title}
-          <Arrow size={4} stroke="#AAAAAA" />
+          <Arrow size={6} stroke="#AAAAAA" />
         </div>
         <SubscriptionNoticeGroup
           id={id}
@@ -43,7 +49,7 @@ function BoardItem({
   }
 
   return (
-    <Link className={$["board-item"]} to={to}>
+    <Link className={$["board-item"]} to={to} onClick={handleBoardClick}>
       <div className={$.title}>{title}</div>
       <div className={$.content}>{content}</div>
     </Link>

@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { Navigate } from "react-router";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { isMobileProduction } from "@shared/util";
 import Article from "src/page/Article";
 import ArticleDetail from "src/page/Article/Detail";
 import Board from "src/page/Board";
 import BoardArticle from "src/page/Board/Article";
-import { setUuid } from "src/utils/storage";
-import { isStaging, isWebView } from "src/utils/webview";
+import { isWebView } from "src/utils/webview";
 
 import "src/polyfills";
+import useFCMToken from "./hooks/useFCMToken";
 import useWindowSizeDetect from "./hooks/useWindowSizeDetect";
 import "./mobile.scss";
 import Cafeteria from "./page/Cafeteria";
@@ -35,15 +35,14 @@ function App() {
     setScreenSize();
   }, [ height ]);
 
-  // MEMO: prod 배포 시 삭제
-  useEffect(() => {
-    setUuid();
-  }, []);
+  useFCMToken();
 
   const appRoutes = [
+    { path: "/", element: <Navigate replace to="/home" /> },
     { path: "/home", element: <Home /> },
     { path: "/calendar", element: <Calendar /> },
     { path: "/article/*", element: <Article /> },
+    { path: "/article", element: <Navigate replace to="/article/subscribe" /> },
     { path: "/article/detail/:articleId", element: <ArticleDetail /> },
     { path: "/board/*", element: <Board /> },
     { path: "/board/article/*", element: <BoardArticle /> },
@@ -63,14 +62,14 @@ function App() {
 
   const webRoutes = [
     { path: "/article/detail/:articleId", element: <ArticleDetail /> },
+    { path: "/cafeteria", element: <Cafeteria /> },
+    { path: "/*", element: <Home /> },
   ];
 
-  const mode = import.meta.env.MODE;
-  const routes = isStaging && !isWebView ? webRoutes : appRoutes;
+  const routes = isMobileProduction && !isWebView ? webRoutes : appRoutes;
 
   return (
     <BrowserRouter>
-      {/* {mode === "production" && !isWebView && <>딥링크</>} */}
       <Routes>
         {routes.map((route) => {
           return (
