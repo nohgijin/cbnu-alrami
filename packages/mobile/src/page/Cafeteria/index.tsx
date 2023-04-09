@@ -1,3 +1,4 @@
+import useSwipe from "@hooks/useSwipe";
 import ErrorFallback from "src/components/atoms/ErrorFallback";
 import SuspenseFallback from "src/components/atoms/SuspenseFallback";
 import CalendarHeader from "src/components/molecules/CalendarHeader";
@@ -22,9 +23,10 @@ function Cafeteria() {
     onIncrease,
     handleMenu,
   } = useCafeteria();
+  const swipeRef = useSwipe();
 
   return (
-    <>
+    <section ref={swipeRef}>
       <header className={$.header}>
         <CalendarHeader
           calendar={{ ...{ year, month, date, day } }}
@@ -46,11 +48,11 @@ function Cafeteria() {
         fallBackHeight="calc(var(--vh, 1vh) * 100)"
         keys={[ fullDate, selectedMenu ]}
       >
-        <CafeteriaBody day={day || 1} {...{ fullDate, selectedMenu }} />
+        <CafeteriaBody {...{ fullDate, selectedMenu }} />
       </AsyncBoundary>
 
       <Footer />
-    </>
+    </section>
   );
 }
 

@@ -1,23 +1,48 @@
+import ReloadButton, {
+  ReloadButtonProps,
+} from "@components/shared/ReloadButton";
 import { CafeteriaMenu } from "@shared/swagger-api/generated";
 import classnames from "classnames";
 import noMenu from "src/assets/no_menu.svg";
 import ShareButton from "src/components/atoms/ShareButton";
 import CafeteriaMenuCard from "src/components/molecules/CafeteriaMenuCard";
-import { useCafeteriaQuery } from "src/hooks/api/cafeteria";
+import { cafeteriaQuery, useCafeteriaQuery } from "src/hooks/api/cafeteria";
+import { holidayQuery, useHoliday } from "src/hooks/api/schedule";
+import { queryClient } from "src/main";
 
 import { getCafeteriaTime } from "../constants";
+import reloadCafeteriaQueries from "./reloadCafeteriaQueries";
 import $ from "./style.module.scss";
 
 type Props = {
   fullDate: string;
-  day: number;
   selectedMenu: CafeteriaMenu["name"];
 };
 
-function CafeteriaBody({ fullDate, day, selectedMenu }: Props) {
-  const isHoliday = day === 6 || day === 0;
+function CafeteriaBody({ fullDate, selectedMenu }: Props) {
+  queryClient.prefetchQuery(holidayQuery(fullDate));
+  queryClient.prefetchQuery(cafeteriaQuery(selectedMenu, fullDate));
   const { data: cafeteriaMenu } = useCafeteriaQuery(selectedMenu, fullDate);
-  const isCafeteriaExist = cafeteriaMenu && cafeteriaMenu.length > 0;
+  const { data: isHoliday } = useHoliday(fullDate);
+
+  if (isHoliday === undefined || !cafeteriaMenu) return null;
+  const isCafeteriaExist = cafeteriaMenu.length > 0;
+
+  const handleReloadClick = () => {
+    return reloadCafeteriaQueries({ selectedMenu, fullDate });
+  };
+
+  const ReloadButtonForCafeteria = ({
+    buttonType,
+  }: Pick<ReloadButtonProps, "buttonType">) => {
+    return (
+      <ReloadButton
+        buttonType={buttonType}
+        onClick={handleReloadClick}
+        className={$["reload-button"]}
+      />
+    );
+  };
 
   return (
     <main
@@ -41,14 +66,15 @@ function CafeteriaBody({ fullDate, day, selectedMenu }: Props) {
               />
             );
           })}
-          <ShareButton
-            size={12}
-            stroke="#9FB0C6"
-            successMsg="식단 링크가 클립보드에 복사되었습니다."
-            className={$["share-button"]}
-          >
-            <span className={$["share-button-text"]}>식단 공유하기</span>
-          </ShareButton>
+          <div className={$["button-box"]}>
+            <ShareButton
+              size={20}
+              stroke="#9FB0C6"
+              successMsg="식단 링크가 클립보드에 복사되었습니다."
+              className={$["share-button"]}
+            />
+            <ReloadButtonForCafeteria buttonType="icon" />
+          </div>
         </>
       )}
 
@@ -56,6 +82,7 @@ function CafeteriaBody({ fullDate, day, selectedMenu }: Props) {
         <div className={$["go-out"]}>
           <img src={noMenu} alt="메뉴가 없습니다." width="130" height="130" />
           <span className={$["go-out-text"]}>오늘은 식단이 없어요</span>
+          <ReloadButtonForCafeteria buttonType="text" />
         </div>
       )}
     </main>
