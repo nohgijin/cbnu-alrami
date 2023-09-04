@@ -31,7 +31,7 @@ function Home() {
       ref={swipeRef}
     >
       <HomeHeader />
-      테스트
+
       <AsyncBoundary
         suspenseFallback={
           <SuspenseFallback
@@ -44,6 +44,7 @@ function Home() {
       >
         <ScheduleContainer today={today} />
       </AsyncBoundary>
+
       <AsyncBoundary
         suspenseFallback={
           <SuspenseFallback
@@ -62,7 +63,9 @@ function Home() {
           }}
         />
       </AsyncBoundary>
+
       <Restaurant {...{ today }} />
+
       <AsyncBoundary
         suspenseFallback={
           <SuspenseFallback
